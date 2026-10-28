@@ -1,0 +1,29 @@
+#!/usr/bin/env bash
+# CHEQRPlayer – unified wrapper (read | write)
+# Usage:
+#   CHEQRPlayer read  --image shot.png --output-type terminal
+#   CHEQRPlayer write --input-type text --text "Hello" --output-file hello
+#
+# Place this script on your PATH (e.g. ~/bin or /usr/local/bin).
+
+set -euo pipefail
+
+SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+PROJECT_ROOT="$(cd "${SCRIPT_DIR}/.." && pwd)"
+
+# Prefer an installed console entry-point (not this script)
+if command -v CHEQRPlayer >/dev/null 2>&1 && [[ "$(command -v CHEQRPlayer)" != "$0" ]]; then
+    exec CHEQRPlayer "$@"
+fi
+if command -v cheqrplayer >/dev/null 2>&1 && [[ "$(command -v cheqrplayer)" != "$0" ]]; then
+    exec cheqrplayer "$@"
+fi
+
+export PYTHONPATH="${PROJECT_ROOT}/src${PYTHONPATH:+:${PYTHONPATH}}"
+
+if ! command -v python3 >/dev/null 2>&1; then
+    echo "error: python3 not found in PATH" >&2
+    exit 127
+fi
+
+exec python3 -m qr_extractor "$@"

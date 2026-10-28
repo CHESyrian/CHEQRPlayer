@@ -1,0 +1,35 @@
+[build-system]
+requires = ["setuptools>=61"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "cheqrplayer"
+version = "1.0.0"
+description = "CHEQRPlayer – CLI tools to decode and create QR codes, including otpauth / TOTP account data"
+readme = "README.md"
+requires-python = ">=3.14"
+license = { text = "MIT" }
+authors = [{ name = "CHEQRPlayer Contributors" }]
+
+dependencies = [
+    "opencv-contrib-python==5.0.0.93",
+    "pillow==12.3.0",
+    "qrcode==8.2",
+]
+
+[project.optional-dependencies]
+dev = [
+    "pytest==9.1.1",
+    "pytest-cov==7.1.0",
+]
+
+[project.scripts]
+CHEQRPlayer = "qr_extractor.player:main"
+cheqrplayer = "qr_extractor.player:main"
+
+[tool.setuptools.packages.find]
+where = ["src"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+pythonpath = ["src"]
